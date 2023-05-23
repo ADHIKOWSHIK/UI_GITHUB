@@ -1,0 +1,33 @@
+// This script file starts replication for tables that have been 
+// selected to a subscription, successfully described, and assigned 
+// to subscription tables.
+//
+// Connect to Access Server.
+connectServer(EAHIGGINS, PINEAPPLE, LOCALHOST, 10101);
+//
+// Connect to datastore.
+connectAgent(HQAGENT);
+//
+// In the event that replication is in progress, stop all replication 
+// activities.
+stopAll(HQAGENT);
+//
+// Perform an initial refresh.
+startRefresh(HQAGENT, BRANCHSYS, *all);
+//
+// Start mirroring.
+startMirror(HQAGENT, BRANCHSYS, continuous);
+//
+// If an error is encountered during a batch file run, continue 
+// processing.
+errorHandle(continue);
+//
+// Run a batch file that displays subscription activity and status 
+// information.
+execute(EA.BAT);
+//
+// Disconnect from datastore.
+disconnectAgent(HQAGENT);
+//
+// Disconnect from Access Server.
+disconnectServer();
